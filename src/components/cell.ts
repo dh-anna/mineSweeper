@@ -6,11 +6,12 @@ export type CellType = "default" | "mine" | "empty0" | "empty1" | "empty2" | "em
 export class Cell {
     private sprite: Sprite;
     private type: CellType;
-
+    private isDefault: boolean;
     private hoverFilter = new ColorMatrixFilter();
 
-    constructor(type: CellType, texture: Texture, positionX: number, positionY: number) {
+    constructor(type: CellType, texture: Texture, isDefault: boolean, positionX: number, positionY: number) {
         this.type = type;
+        this.isDefault = isDefault;
         this.sprite = new Sprite(texture);
         this.sprite.width = 80;
         this.sprite.height = 80;
@@ -19,6 +20,15 @@ export class Cell {
         this.sprite.eventMode = "static";
         this.sprite.cursor = "pointer";
         this.hoverFilter.brightness(0.85, false);
+
+        this.sprite.on("pointerdown", () => {
+            if (this.isDefault) {
+                this.isDefault = false;
+                const texture = AssetManager.getInstance().getAsset(type);
+                if (!texture) throw new Error(`Texture for ${type} not found`);
+                this.sprite.texture = texture;
+            }
+        });
 
         this.sprite.on("pointerenter", () => {
             console.log("hovering");
@@ -31,9 +41,10 @@ export class Cell {
     }
 
     static createSpecificCell(type: CellType, positionX: number, positionY: number) {
-        const texture = AssetManager.getInstance().getAsset(type);
+        //const texture = AssetManager.getInstance().getAsset(type);
+        const texture = AssetManager.getInstance().getAsset("default");
         if (!texture) throw new Error(`Texture for ${type} not found`);
-        return new Cell(type, texture, positionX, positionY);
+        return new Cell(type, texture, true, positionX, positionY);
     }
 
     getSprite() {
