@@ -19,8 +19,13 @@ export class AssetManager {
 
     public loadAssets() {
         this.assets = {
-            empty1: Assets.get("empty1"),
             empty0: Assets.get("empty0"),
+            empty1: Assets.get("empty1"),
+            empty2: Assets.get("empty2"),
+            empty3: Assets.get("empty3"),
+            empty4: Assets.get("empty4"),
+            empty5: Assets.get("empty5"),
+            empty6: Assets.get("empty6"),
             mine: Assets.get("mine"),
             default: Assets.get("default"),
         };

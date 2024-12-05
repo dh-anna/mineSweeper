@@ -30,10 +30,13 @@ window.onload = async (): Promise<void> => {
 
     app.stage.addChild(table.container);
     app.stage.interactive = true;
-    table.container.x = app.screen.width / 2;
-    table.container.y = app.screen.height / 2;
-    table.container.pivot.x = table.container.width / 2;
-    table.container.pivot.y = table.container.height / 2;
+
+    console.log(table.container.parent);
+
+    //table.container.x = app.screen.width / 2 - table.container.width / 2;
+    //table.container.y = app.screen.height / 2 - table.container.height / 2;
+    //table.container.pivot.x = table.container.width / 2;
+    //table.container.pivot.y = table.container.height / 2;
 
     resizeCanvas();
 };
