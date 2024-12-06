@@ -9,9 +9,10 @@ export class Cell {
     private isDefault: boolean;
     private hoverFilter = new ColorMatrixFilter();
 
-    constructor(type: CellType, texture: Texture, isDefault: boolean, positionX: number, positionY: number) {
+    constructor(type: CellType, texture: Texture, positionX: number, positionY: number) {
         this.type = type;
-        this.isDefault = isDefault;
+        this.isDefault = true;
+
         this.sprite = new Sprite(texture);
         this.sprite.width = 80;
         this.sprite.height = 80;
@@ -24,27 +25,25 @@ export class Cell {
         this.sprite.on("pointerdown", () => {
             if (this.isDefault) {
                 this.isDefault = false;
-                const texture = AssetManager.getInstance().getAsset(type);
-                if (!texture) throw new Error(`Texture for ${type} not found`);
-                this.sprite.texture = texture;
+                if (this.type === "mine") {
+                    //gameEvents.emit("gamelost");
+                    const texture = AssetManager.getInstance().getAsset(type);
+                    if (!texture) throw new Error(`Texture for ${type} not found`);
+                    this.sprite.texture = texture;
+                } else {
+                    const texture = AssetManager.getInstance().getAsset(type);
+                    if (!texture) throw new Error(`Texture for ${type} not found`);
+                    this.sprite.texture = texture;
+                }
             }
         });
 
         this.sprite.on("pointerenter", () => {
-            console.log("hovering");
             this.sprite.filters = [this.hoverFilter];
         });
         this.sprite.on("pointerleave", () => {
-            console.log("not hovering");
             this.sprite.filters = [];
         });
-    }
-
-    static createSpecificCell(type: CellType, positionX: number, positionY: number) {
-        //const texture = AssetManager.getInstance().getAsset(type);
-        const texture = AssetManager.getInstance().getAsset("default");
-        if (!texture) throw new Error(`Texture for ${type} not found`);
-        return new Cell(type, texture, true, positionX, positionY);
     }
 
     getSprite() {
